@@ -1,52 +1,65 @@
 import "./App.css";
+import Board from "./Board";
 import { useState } from "react";
-// import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 
-function Board(props) {
+function Container(props) {
   console.log(props);
   return (
-    <div className="board">
-      <BoardLeft />
-      <BoardRight mode={props.mode} onChange={props.onChange} />
+    <div className="container">
+      <ContainerLeft />
+      <ContainerRight mode={props.mode} onChange={props.onChange} />
     </div>
   );
 }
 
-function BoardLeft() {
+function ContainerLeft() {
   return (
-    <div className="board-left">
+    <div className="containerLeft">
       <h1>Jungle Board</h1>
     </div>
   );
 }
 
-function BoardRight(props) {
+function ContainerRight(props) {
   console.log(props);
   if (props.mode === "LOGIN") {
     return (
-      <div className="board-right">
+      <div className="containerRight">
         <Login mode={props.mode} onChange={props.onChange} />
-        {/* <Submit mode={props.mode} /> */}
       </div>
     );
   } else if (props.mode === "SIGNUP") {
     return (
-      <div className="board-right">
+      <div className="containerRight">
         <SignUp mode={props.mode} onChange={props.onChange} />
-        {/* <Submit /> */}
       </div>
     );
   }
 }
 
 function Login(props) {
+  const navigate = useNavigate();
   return (
     <div className="login">
       <input type="text" placeholder="아이디" />
       <input type="text" placeholder="패스워드" />
-      <button>로그인</button>
+      <button
+        onClick={() => {
+          navigate("/board");
+        }}
+      >
+        로그인
+      </button>
       <div className="changeMode">
         <p>계정이 없으신가요?</p>
+
         <button
           onClick={() => {
             props.onChange("SIGNUP");
@@ -83,7 +96,15 @@ function App() {
   const [mode, setMode] = useState("LOGIN");
   return (
     <div className="App">
-      <Board mode={mode} onChange={setMode} />
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={<Container mode={mode} onChange={setMode} />}
+          ></Route>
+          <Route path="/board" element={<Board />}></Route>
+        </Routes>
+      </Router>
     </div>
   );
 }

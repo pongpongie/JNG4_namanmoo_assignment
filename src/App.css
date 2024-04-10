@@ -5,7 +5,7 @@
   justify-content: center;
 }
 
-.board {
+.container {
   height: 50%;
   width: 60%;
   display: flex;
@@ -16,7 +16,7 @@
   border-radius: 80px;
 }
 
-.board-left {
+.containerLeft {
   display: flex;
   align-items: center;
   width: 80%;
@@ -26,7 +26,7 @@
   justify-content: center;
 }
 
-.board-right {
+.containerRight {
   display: flex;
   flex-direction: column;
   align-items: center;
