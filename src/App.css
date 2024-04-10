@@ -1,0 +1,27 @@
+.board {
+  height: 80%;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 10px solid black;
+}
+
+.board-left {
+  display: flex;
+  width: 80%;
+  height: 60%;
+  border-radius: 10px;
+  /* border: 10px solid black; */
+  justify-content: center;
+}
+
+.board-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80%;
+  height: 60%;
+  border-radius: 10px;
+  /* border: 10px solid black; */
+}
