@@ -20,8 +20,7 @@ function BoardLeft() {
 function BoardRight() {
   return (
     <div className="board-right">
-      <InputArea />
-      <InputArea />
+      <Login />
       <SubmitArea />
     </div>
   );
@@ -35,21 +34,22 @@ function BoardContent() {
   );
 }
 
-function InputArea() {
+function Login() {
   return (
-    <div className="inputArea">
-      <input type="text" />
+    <div className="login">
+      <input type="text" placeholder="아이디" />
+      <input type="text" placeholder="패스워드" />
     </div>
   );
 }
 
 function SubmitArea() {
-  return <a href="/submit">Submit</a>;
+  return <a href="/submit">제출하기</a>;
 }
 
 function App() {
   return (
-    <div>
+    <div className="App">
       <Board />
     </div>
   );
