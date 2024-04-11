@@ -1,7 +1,12 @@
+import "./Board.css";
+
 function Board() {
   return (
     <div className="board">
-      <h1>게시판</h1>
+      <form>
+        <input placeholder="제목"></input>
+        <textarea placeholder="내용을 입력해 주세요"></textarea>
+      </form>
     </div>
   );
 }
