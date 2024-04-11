@@ -1,101 +1,274 @@
 import "./Board.css";
 import { useState } from "react";
 
-function Header() {
+function Header(props) {
   return (
-    <div className="header">
-      <h1>Jungle Board</h1>
-      <h1> 내 정보</h1>
-    </div>
-  );
-}
-
-function Body(props) {
-  return (
-    <div className="body">
-      <BoardContainer mode={props.mode} onChange={props.onChange} />
-    </div>
+    <header className="header">
+      <h1>
+        <a
+          href="/"
+          onClick={(event) => {
+            event.preventDefault();
+            props.onChangeMode();
+          }}
+        >
+          {props.title}
+        </a>
+      </h1>
+      <h1>My Page</h1>
+    </header>
   );
 }
 
 function Nav(props) {
-  return (
-    <div className="nav">
-      <Button mode={props.mode} onChange={props.onChange} />
-    </div>
-  );
-}
-
-function BoardContainer(props) {
-  if (props.mode === "READ") {
-    return (
-      <div className="boardContainer">
-        <Nav mode={props.mode} onChange={props.onChange} />
-        <div className="boardContents">
-          <Read mode={props.mode} onChange={props.onChange} />
-        </div>
-      </div>
-    );
-  } else if (props.mode === "CREATE") {
-    return (
-      <div className="boardContatiner">
-        <Nav mode={props.mode} onChange={props.onChange} />
-        <div className="boardContents">
-          <Read mode={props.mode} onChange={props.onChange} />
-        </div>
+  const lis = [];
+  for (let i = 0; i < props.topics.length; i++) {
+    let t = props.topics[i];
+    lis.push(
+      <div className="navLists" key={t.id}>
+        <img src={t.url} alt="mock"></img>
+        <a
+          id={t.id}
+          href={"/read/" + t.id}
+          onClick={(event) => {
+            event.preventDefault();
+            props.onChangeMode(Number(event.target.id));
+          }}
+        >
+          {t.title}
+        </a>
       </div>
     );
   }
+  return <nav className="navContainer">{lis}</nav>;
 }
 
-function Read(props) {
+function Article(props) {
+  console.log(props.url);
   return (
-    <>
-      <Article />
-      <Article />
-      <Article />
-    </>
-  );
-}
-
-function Button(props) {
-  return (
-    <button
-      className="button"
-      onClick={(event) => {
-        props.onChange("CREATE");
-      }}
-    >
-      {props.mode}
-    </button>
+    <article>
+      <img src={props.url} alt="mock"></img>
+      <h2>{props.title}</h2>
+      {props.body}
+    </article>
   );
 }
 
 function Create(props) {
   return (
-    <form>
-      <input placeholder="제목"></input>
-      <textarea placeholder="내용을 입력해 주세요"></textarea>
-    </form>
+    <article>
+      <h2>Create</h2>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          const title = event.target.title.value;
+          const body = event.target.body.value;
+          props.onCreate(title, body);
+        }}
+      >
+        <p>
+          <input type="text" name="title" placeholder="title" />
+        </p>
+        <p>
+          <textarea name="body" placeholder="body"></textarea>
+        </p>
+        <p>
+          <input type="submit" value="Create"></input>
+        </p>
+      </form>
+    </article>
   );
 }
 
-function Article() {
+function Update(props) {
+  const [title, setTitle] = useState(props.title);
+  const [body, setBody] = useState(props.body);
   return (
-    <article className="article">
-      <img src="https://via.placeholder.com/150" alt="placeholder" />
-      <li>제목</li>
-      <li>댓글</li>
+    <article>
+      <h2>Update</h2>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          const title = event.target.title.value;
+          const body = event.target.body.value;
+          props.onUpdate(title, body);
+        }}
+      >
+        <p>
+          <input
+            type="text"
+            name="title"
+            placeholder="title"
+            value={title}
+            onChange={(event) => {
+              setTitle(event.target.value);
+            }}
+          />
+        </p>
+        <p>
+          <textarea
+            name="body"
+            placeholder="body"
+            value={body}
+            onChange={(event) => {
+              setBody(event.target.value);
+            }}
+          ></textarea>
+        </p>
+        <p>
+          <input type="submit" value="Update"></input>
+        </p>
+      </form>
     </article>
   );
 }
 
 function Board() {
-  const [mode, setMode] = useState("READ");
+  const [mode, setMode] = useState("WELCOME");
+  const [id, setId] = useState(null);
+  const [nextId, setNextId] = useState(4);
+  const [topics, setTopics] = useState([
+    {
+      id: 1,
+      title: "html",
+      body: "html is ...",
+      url: "https://picsum.photos/64/64",
+    },
+    {
+      id: 2,
+      title: "css",
+      body: "css is ...",
+      url: "https://picsum.photos/64/64",
+    },
+    {
+      id: 3,
+      title: "js",
+      body: "js is ...",
+      url: "https://picsum.photos/64/64",
+    },
+  ]);
+  let content = null;
+  let contextControl = null;
+  if (mode === "WELCOME") {
+    content = (
+      <h1>
+        Welcome to the Jungle <br></br> this is Jungle Board
+      </h1>
+    );
+  } else if (mode === "READ") {
+    let title,
+      body,
+      url = null;
+    for (let i = 0; i < topics.length; i++) {
+      if (topics[i].id === id) {
+        title = topics[i].title;
+        body = topics[i].body;
+        url = topics[i].url;
+      }
+    }
+    content = <Article url={url} title={title} body={body}></Article>;
+    contextControl = (
+      <>
+        <button
+          href={"/update" + id}
+          onClick={(event) => {
+            event.preventDefault();
+            setMode("UPDATE");
+          }}
+        >
+          Update
+        </button>
+        <input
+          type="button"
+          value="Delete"
+          onClick={() => {
+            const newTopics = [];
+            for (let i = 0; i < topics.length; i++) {
+              if (topics[i].id !== id) {
+                newTopics.push(topics[i]);
+              }
+            }
+            setTopics(newTopics);
+            setMode("WELCOME");
+          }}
+        ></input>
+      </>
+    );
+  } else if (mode === "CREATE") {
+    content = (
+      <Create
+        onCreate={(_title, _body) => {
+          const newTopic = { id: nextId, title: _title, body: _body };
+          const newTopics = [...topics];
+          newTopics.push(newTopic);
+          setTopics(newTopics);
+          setMode("READ");
+          setId(nextId);
+          setNextId(nextId + 1);
+        }}
+      ></Create>
+    );
+  } else if (mode === "UPDATE") {
+    let title,
+      body = null;
+    for (let i = 0; i < topics.length; i++) {
+      if (topics[i].id === id) {
+        title = topics[i].title;
+        body = topics[i].body;
+      }
+    }
+    content = (
+      <Update
+        title={title}
+        body={body}
+        onUpdate={(title, body) => {
+          const newTopics = [...topics];
+          const updatedTopic = { id: id, title: title, body: body };
+          for (let i = 0; i < newTopics.length; i++) {
+            if (newTopics[i].id === id) {
+              newTopics[i] = updatedTopic;
+              break;
+            }
+          }
+          setTopics(newTopics);
+          setMode("READ");
+        }}
+      ></Update>
+    );
+  }
+
   return (
     <div className="board">
-      <Header />
-      <Body mode={mode} onChange={setMode} />
+      <Header
+        title="JUNGLE BOARD"
+        onChangeMode={() => {
+          setMode("WELCOME");
+        }}
+      ></Header>
+      <div className="boardContainer">
+        <div className="boardContent">{content}</div>
+        <div className="boardInfo">
+          <Nav
+            topics={topics}
+            onChangeMode={(_id) => {
+              setMode("READ");
+              setId(_id);
+            }}
+          ></Nav>
+          <div className="contextContainer">
+            <button
+              href="/create"
+              onClick={(event) => {
+                event.preventDefault();
+                setMode("CREATE");
+              }}
+            >
+              Create
+            </button>
+            {contextControl}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
