@@ -1,2 +1,51 @@
 .board {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.body {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.article {
+  display: flex;
+  flex-direction: row;
+}
+
+.boardContainer {
+  width: 80%;
+  height: 80%;
+  border: 10px solid #3dd894;
+  border-radius: 10px;
+  flex-wrap: wrap;
+}
+
+.boardContents {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  height: 80%;
+  padding: 3%;
+  justify-content: space-around;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  margin-left: 90%;
+  padding: 1%;
 }

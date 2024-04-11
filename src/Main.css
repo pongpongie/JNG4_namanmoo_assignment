@@ -1,3 +1,9 @@
+.main {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
 .container {
   height: 50%;
   width: 60%;

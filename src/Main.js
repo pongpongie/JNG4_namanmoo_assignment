@@ -1,14 +1,15 @@
 import "./Main.css";
-import Board from "./Board";
-import { useState } from "react";
+// import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Container(props) {
   console.log(props);
   return (
-    <div className="container">
-      <ContainerLeft />
-      <ContainerRight mode={props.mode} onChange={props.onChange} />
+    <div className="main">
+      <div className="container">
+        <ContainerLeft />
+        <ContainerRight mode={props.mode} onChange={props.onChange} />
+      </div>
     </div>
   );
 }
