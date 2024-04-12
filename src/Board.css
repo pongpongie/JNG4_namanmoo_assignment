@@ -16,9 +16,16 @@
 }
 
 .header {
-  width: 100%;
+  width: 80%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+}
+
+.headerTitle {
+  padding-left: 2%;
+}
+.myPage {
+  padding-right: 2%;
 }
 
 .article {
@@ -114,6 +121,7 @@
 }
 .navListsContentContainer {
   display: flex;
+  flex-direction: column;
   width: 70%;
   height: 100%;
 }
@@ -123,6 +131,10 @@
   width: 100%;
   font-size: 1.5em;
   font-weight: bold;
+}
+.navListsContentComment {
+  margin-left: 5%;
+  padding-top: 5%;
 }
 
 .readArticle {
@@ -165,4 +177,46 @@
   margin-left: 5%;
   padding-bottom: 5%;
   padding-right: 5%;
+}
+
+.createArticle,
+.updateArticle {
+  /* display: flex; */
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+}
+
+.updateTitle,
+.createTitle {
+  padding: 2.5% 5% 0 5%;
+}
+
+.updateBody,
+.createBody {
+  padding: 0 5% 5% 5%;
+  width: 90%;
+  height: 82.5%;
+}
+
+.formTitle {
+  height: 8%;
+  width: 100%;
+}
+
+.formBody {
+  width: 100%;
+  height: 80%;
+  margin-top: 2%;
+}
+
+.formUrl {
+  margin-bottom: 2%;
+  width: 100%;
+}
+
+.createForm,
+.updateForm {
+  height: 100%;
 }
