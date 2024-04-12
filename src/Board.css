@@ -43,6 +43,8 @@
   align-items: center;
   height: 100%;
   width: 50%;
+  border-right: 5px dashed #3dd894;
+  overflow: auto;
 }
 
 .boardInfo {
@@ -50,11 +52,12 @@
   flex-direction: column;
   width: 50%;
   height: 100%;
+  border-left: 5px dashed #3dd894;
 }
 
 .contextContainer {
   display: flex;
-  height: 20%;
+  height: 10%;
   align-items: center;
   justify-content: space-evenly;
   flex-direction: row;
@@ -67,23 +70,67 @@
 }
 
 .nav {
+  height: 100%;
   display: flex;
   justify-content: center;
   margin-left: 90%;
   padding: 1%;
 }
-.navLists {
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
-}
 .navContainer {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   width: 100%;
-  height: 80%;
+  height: 90%;
   align-items: center;
+  overflow-y: auto;
+}
+.navLists {
+  display: flex;
+  height: 30%;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.readArticle {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+}
+
+.readArticleImageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 60%;
+}
+
+.readArticleImage {
+  width: 90%;
+  height: 80%;
+  border-radius: 10px;
+}
+
+.readArticleTitleContainer {
+  height: 15%;
+  width: 100%;
+}
+
+.readArticleTitle {
+  margin-left: 5%;
+}
+
+.readArticleBodyContainer {
+  height: 25%;
+  width: 100%;
+}
+
+.readArticleBody {
+  margin-left: 5%;
+  padding-bottom: 5%;
+  padding-right: 5%;
 }

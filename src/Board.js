@@ -40,16 +40,22 @@ function Nav(props) {
       </div>
     );
   }
-  return <nav className="navContainer">{lis}</nav>;
+  return <div className="navContainer">{lis}</div>;
 }
 
 function Article(props) {
   console.log(props.url);
   return (
-    <article>
-      <img src={props.url} alt="mock"></img>
-      <h2>{props.title}</h2>
-      {props.body}
+    <article className="readArticle">
+      <div className="readArticleImageContainer">
+        <img className="readArticleImage" src={props.url} alt="mock"></img>
+      </div>
+      <div className="readArticleTitleContainer">
+        <h2 className="readArticleTitle">{props.title}</h2>
+      </div>
+      <div className="readArticleBodyContainer">
+        <div className="readArticleBody">{props.body}</div>
+      </div>
     </article>
   );
 }
@@ -130,20 +136,20 @@ function Board() {
   const [topics, setTopics] = useState([
     {
       id: 1,
-      title: "html",
-      body: "html is ...",
+      title: "Duis metus ipsum",
+      body: "Phasellus et lacus a enim sodales finibus. Praesent convallis lectus non posuere mattis. Ut condimentum convallis arcu, nec lobortis orci maximus sed. Etiam faucibus lobortis massa eu gravida. Sed congue tristique mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec vestibulum sed lorem eget feugiat. Sed pretium dui leo, a tincidunt eros luctus eu.",
       url: "https://picsum.photos/64/64",
     },
     {
       id: 2,
-      title: "css",
-      body: "css is ...",
+      title: "Dolor sit amet",
+      body: "Maecenas eget sollicitudin urna, ac mattis urna. Phasellus ullamcorper elit dapibus auctor porttitor. Curabitur vel nibh mauris. Donec in lectus ut leo hendrerit mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus eleifend facilisis egestas. Cras molestie fringilla porta. Vivamus lobortis eros pharetra lacus aliquam, vel sagittis est auctor. Ut aliquam purus dolor, non volutpat tortor accumsan nec. Vivamus tincidunt, est a semper fermentum, lectus tellus tempus felis, et aliquam augue augue vitae sem.",
       url: "https://picsum.photos/64/64",
     },
     {
       id: 3,
-      title: "js",
-      body: "js is ...",
+      title: "Lorem Ipsum",
+      body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet sem semper, scelerisque ex in, convallis velit. Maecenas eleifend urna nec vestibulum molestie. Sed porttitor congue euismod. Nam arcu dui, pellentesque in purus sed, ultricies mollis magna. Duis scelerisque purus id mauris pharetra pretium. Phasellus sem ante, gravida eget tortor a, ullamcorper cursus eros. Donec pellentesque venenatis bibendum. Mauris semper mattis magna, sit amet pulvinar magna molestie quis. Pellentesque vitae nibh dolor. Sed dictum, eros eu commodo sodales, elit lectus lacinia nulla, id suscipit ex turpis at dui. Maecenas laoreet dui ut turpis eleifend venenatis. Sed nec ante vel nulla sagittis congue nec sollicitudin dui. Etiam convallis fringilla auctor. Donec aliquam elit ligula, id egestas dolor vulputate eget. Maecenas eget metus et tortor ornare blandit non a massa. Vestibulum rhoncus purus sed hendrerit aliquam.",
       url: "https://picsum.photos/64/64",
     },
   ]);
