@@ -26,17 +26,22 @@ function Nav(props) {
     let t = props.topics[i];
     lis.push(
       <div className="navLists" key={t.id}>
-        <img src={t.url} alt="mock"></img>
-        <a
-          id={t.id}
-          href={"/read/" + t.id}
-          onClick={(event) => {
-            event.preventDefault();
-            props.onChangeMode(Number(event.target.id));
-          }}
-        >
-          {t.title}
-        </a>
+        <div className="navListsImgContainer">
+          <img className="navListsImg" src={t.url} alt="mock"></img>
+        </div>
+        <div className="navListsContentContainer">
+          <a
+            className="navListsContentTitle"
+            id={t.id}
+            href={"/read/" + t.id}
+            onClick={(event) => {
+              event.preventDefault();
+              props.onChangeMode(Number(event.target.id));
+            }}
+          >
+            {t.title}
+          </a>
+        </div>
       </div>
     );
   }

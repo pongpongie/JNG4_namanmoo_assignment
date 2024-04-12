@@ -43,8 +43,11 @@
   align-items: center;
   height: 100%;
   width: 50%;
-  border-right: 5px dashed #3dd894;
+  border-right: 5px solid #3dd894;
   overflow: auto;
+}
+.boardContent::-webkit-scrollbar {
+  display: none;
 }
 
 .boardInfo {
@@ -52,13 +55,14 @@
   flex-direction: column;
   width: 50%;
   height: 100%;
-  border-left: 5px dashed #3dd894;
+  border-left: 5px solid #3dd894;
 }
 
 .contextContainer {
   display: flex;
   height: 10%;
   align-items: center;
+  border-top: 10px solid #3dd894;
   justify-content: space-evenly;
   flex-direction: row;
 }
@@ -77,20 +81,48 @@
   padding: 1%;
 }
 .navContainer {
-  display: flex;
-  flex-direction: column;
+  overflow: overlay;
   width: 100%;
   height: 90%;
+  min-height: 300px;
   align-items: center;
-  overflow-y: auto;
 }
+
+.navContainer::-webkit-scrollbar {
+  display: none;
+}
+
 .navLists {
+  padding: 4%;
   display: flex;
-  height: 30%;
-  width: 100%;
+  height: 125px;
+  width: 92%;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  border-bottom-width: 2.5px;
+  border-bottom-color: #3dd894;
+  border-bottom-style: dashed;
+}
+.navListsImgContainer {
+  width: 30%;
+  height: 100%;
+}
+.navListsImg {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+.navListsContentContainer {
+  display: flex;
+  width: 70%;
+  height: 100%;
+}
+.navListsContentTitle {
+  margin-left: 5%;
+  padding-top: 5%;
+  width: 100%;
+  font-size: 1.5em;
+  font-weight: bold;
 }
 
 .readArticle {
