@@ -21,7 +21,11 @@ function Header(props) {
 }
 
 function Nav(props) {
+  const [readComment, setReadComment] = useState("READ");
+  const [selectedTopicId, setSelectedTopicId] = useState(null);
   const lis = [];
+  const commentList = [];
+
   for (let i = 0; i < props.topics.length; i++) {
     let t = props.topics[i];
     lis.push(
@@ -37,6 +41,8 @@ function Nav(props) {
             onClick={(event) => {
               event.preventDefault();
               props.onChangeMode(Number(event.target.id));
+              setReadComment("COMMENT");
+              setSelectedTopicId(t.id);
             }}
           >
             {t.title}
@@ -47,12 +53,37 @@ function Nav(props) {
         </div>
       </div>
     );
+    if (selectedTopicId === t.id) {
+      for (let j = 0; j < t.comments.length; j++) {
+        let c = t.comments[j];
+        let contents = (
+          <div className="navLists" key={c.userId}>
+            <div className="navListsImgContainer"></div>
+            <div className="navListsContentContainer">
+              <p
+                className="navListsContentTitle"
+                id={c.userId}
+                href={"/read/" + c.userId}
+              >
+                {c.body}
+              </p>
+              <div className="navListsContentComment"></div>
+            </div>
+          </div>
+        );
+        commentList.push(contents);
+      }
+    }
+    console.log(commentList);
   }
-  return <div className="navContainer">{lis}</div>;
+  if (readComment === "COMMENT") {
+    return <div className="navContainer">{commentList}</div>;
+  } else {
+    return <div className="navContainer">{lis}</div>;
+  }
 }
 
 function Article(props) {
-  console.log(props.url);
   return (
     <article className="readArticle">
       <div className="readArticleImageContainer">
@@ -168,6 +199,15 @@ function Update(props) {
   );
 }
 
+function Comment(props) {
+  return (
+    <div className="comment">
+      <input type="text" placeholder="댓글을 입력해주세요"></input>
+      <button>댓글 등록</button>
+    </div>
+  );
+}
+
 function Board() {
   const [mode, setMode] = useState("WELCOME");
   const [id, setId] = useState(null);
@@ -175,9 +215,9 @@ function Board() {
   const [topics, setTopics] = useState([
     {
       id: 1,
-      title: "Duis metus ipsum",
-      body: "Phasellus et lacus a enim sodales finibus. Praesent convallis lectus non posuere mattis. Ut condimentum convallis arcu, nec lobortis orci maximus sed. Etiam faucibus lobortis massa eu gravida. Sed congue tristique mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec vestibulum sed lorem eget feugiat. Sed pretium dui leo, a tincidunt eros luctus eu.",
-      url: "https://picsum.photos/64/64",
+      title: "이재원은 아주 유명한 곰이다.",
+      body: "포유류의 식육목 곰과에 속하는 동물들의 총칭. 아프리카, 오스트레일리아 대륙, 남극을 제외한 전 세계에 분포한다. 현재 총 8종이 생존하고 있으며, 한반도에 사는 곰은 우수리불곰과 아시아흑곰 2종류가 있다. 새끼 곰은 특히 '능소니'라고 한다. 예전에는 '슭곰'이라고 하여 큰 곰을 따로 부르는 말이 있었다. 쿵쿵따 할 때 심심찮게 나오는 '슭곰발'이란 단어는 이 '슭곰'과 '발'이 합쳐진 것이다. 본디 고대 유럽에서는 곰이 동물의 제왕으로 숭배받았다.[5] 게르만이나 슬라브계통의 여타 고대 유럽인들에게 곰은 경외의 대상이었으며, 고대 북유럽과 게르만계통의 문화권에서 '곰 가죽을 뒤집어 쓴 전사'를 가장 뛰어나고 용맹한 사람으로 대우하며 이를 베르세르크/버서커라고 불렀다. 중세를 거치면서 그리스도교의 영향으로 사자에 의해 동물의 왕 이미지를 공고히 하여 곰은 밀려나게 된다. 예외적으로 러시아의 경우, 독수리와 함께 곰을 여전히 국가의 상징으로 같이 내세운다. 식육목 중에서도 개아목에 속하며 같은 개아목인 갯과나 족제비과보다는 바다표범이나 바다사자같은 기각류들과 더 가깝다고 알려져있었지만 유전자 검사로 족제비과와 기각류와도 멀리 있음이 밝혀졌다.[6] 대형 포식자임에도 다양한 식성과 종류, 뛰어난 적응력 덕분에 다른 대형 포식자인 사자나 호랑이 등과 달리 개체 수도 많고 분포도도 넓다. 특히 불곰이 더욱 그렇다.",
+      url: "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/602/d037ae2daa4d1aaa20f93fc32edfd756_res.jpeg",
       comments: [
         { userId: 1, body: "comment1" },
         { userId: 2, body: "comment2" },
@@ -187,9 +227,9 @@ function Board() {
     },
     {
       id: 2,
-      title: "고양이는 최고다",
-      body: "고양이(Felis catus)는 포유류 식육목 고양이과의 동물이다. 고양이의 신체적 특성과 습성은 다른 고양이과 동물들과 동일하여 빠른 반사신경, 탁월한 유연성, 날카로운 이빨, 넣고 꺼낼 수 있는 발톱 등이 있다. 고양이는 매우 긴 수면 시간을 가지고 있어 하루 종일 자는 시간이 굉장히 많으나 기본적으로 야생에서는 포식자 동물이라는 특성 상 박명박모성(薄明薄暮性)으로, 해뜰녘과 해질녘에 주로 행동한다. 또한 여타 고양잇과 동물들과 같이 고양이는 육식동물로, 야생에 사는 들고양이는 쥐, 다람쥐, 작은 새 등을 사냥해 잡아먹는다. 한국에서는 사는 곳에 따라 들고양이, 길고양이, 집고양이 등으로 구분된다. 고양이는 19세기 후반 이후 인간에 의해 품종개량 되어 현재는 다양한 묘종이 있으며, 품종 등록을 관장하는 국제고양이협회(TICA)는 71개 묘종을 인정한다.",
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTP0j3d6ZX-maI_ZlcLsdGkNnOvOBQxwr9o0w&s",
+      title: "이재원은 아주 유명한 꼬부기이다.",
+      body: "꼬부기라는 명칭의 유래는 일판은 ゼニガメ(제니가메:청거북), 한판은 꼬마+거북이, 영판은 Squirt(작은 구멍으로 액체를 쏘다)+Turtle(거북)로 추정된다.1세대인 레드/그린/블루와 3세대인 파이어레드/리프그린의 주인공인 레드가 스타팅으로 파이리를 고르면 라이벌이자 이후 챔피언이 되는 그린이 이 녀석을 고른다.반디나 역시도 플레이어가 이상해씨를 골랐을 경우 꼬부기를 사용한다.",
+      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqt-juoU5Sy7dXvujofXFQhs_G7FJLucyyCw&s",
       comments: [
         { userId: 1, body: "comment1" },
         { userId: 2, body: "comment2" },
@@ -236,6 +276,7 @@ function Board() {
         body={body}
       ></Article>
     );
+
     contextControl = (
       <>
         <button
