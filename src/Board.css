@@ -17,6 +17,7 @@
 
 .header {
   width: 80%;
+  height: 10%;
   display: flex;
   justify-content: space-between;
 }
@@ -102,21 +103,23 @@
 .navLists {
   padding: 4%;
   display: flex;
-  height: 125px;
+  min-height: 125px;
+  max-height: 500px;
   width: 92%;
   flex-direction: row;
   align-items: center;
   border-bottom-width: 2.5px;
   border-bottom-color: #3dd894;
   border-bottom-style: dashed;
+  white-space: pre-wrap;
 }
 .navListsImgContainer {
   width: 30%;
-  height: 100%;
+  max-height: 100%;
 }
 .navListsImg {
   width: 100%;
-  height: 100%;
+  max-height: 125px;
   border-radius: 10px;
 }
 .navListsContentContainer {
@@ -124,6 +127,20 @@
   flex-direction: column;
   width: 70%;
   height: 100%;
+}
+.navListsCommentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  min-height: 125px;
+  max-height: 450px;
+  word-break: keep-all;
+  overflow-y: auto;
+}
+.navListsCommentContainer::-webkit-scrollbar {
+  display: none;
 }
 .navListsContentTitle {
   margin-left: 5%;
@@ -133,10 +150,30 @@
   font-weight: bold;
 }
 .navListsContentComment {
-  margin-left: 5%;
   padding-top: 5%;
+  margin-left: 5%;
+  display: flex;
+  flex-direction: row;
+}
+.navListsUserIdContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 20%;
+  font-size: 1em;
+  font-weight: bold;
 }
 
+.navListsCommentBody {
+  word-break: break-all;
+  margin-left: 5%;
+  min-height: 125px;
+  max-height: 450px;
+  width: 90%;
+  font-size: 1em;
+  font-weight: bold;
+}
 .readArticle {
   display: flex;
   flex-direction: column;
@@ -177,8 +214,10 @@
   margin-left: 5%;
   padding-bottom: 5%;
   padding-right: 5%;
+  white-space: pre-wrap;
 }
 
+.commentArticle,
 .createArticle,
 .updateArticle {
   /* display: flex; */
@@ -200,15 +239,34 @@
   height: 82.5%;
 }
 
+.commentFormContainer {
+  padding: 5% 5% 5% 5%;
+  width: 90%;
+  height: 90%;
+}
+
+.commentFormUserId,
 .formTitle {
+  font-size: 2em;
   height: 8%;
   width: 100%;
 }
 
+.formTitle {
+  font-size: 2em;
+}
+
+.commentFormBody,
 .formBody {
+  font-size: 2em;
   width: 100%;
   height: 80%;
   margin-top: 2%;
+}
+
+.commentFormBody,
+.commentFormUserId {
+  font-size: 2em;
 }
 
 .formUrl {
@@ -216,7 +274,54 @@
   width: 100%;
 }
 
+.commentForm,
 .createForm,
 .updateForm {
   height: 100%;
+}
+
+.noCommentContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* Buttons */
+.submitButton {
+  font-size: 1.2em;
+  margin-top: 2%;
+  background: #00ae68;
+  /* display: block; */
+  /* position: relative; */
+  width: 120px;
+  font-weight: 400;
+  text-align: center;
+  line-height: 30px;
+  color: #fff;
+  border-radius: 5px;
+  border-color: white;
+  border-width: 0;
+  transition: all 0.2s;
+}
+
+.contextButtons {
+  font-size: 1.2em;
+  background: #00ae68;
+  /* display: block; */
+  /* position: relative; */
+  width: 120px;
+  font-weight: 400;
+  text-align: center;
+  line-height: 30px;
+  color: #fff;
+  border-radius: 5px;
+  border-color: white;
+  border-width: 0;
+  transition: all 0.2s;
+}
+
+.submitButton:hover,
+.contextButtons:hover {
+  background: #21825b;
 }

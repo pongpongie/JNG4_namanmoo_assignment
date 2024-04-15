@@ -4,7 +4,7 @@ import { useState } from "react";
 function Header(props) {
   return (
     <header className="header">
-      <h1 className="headerTitle">
+      <h2 className="headerTitle">
         <a
           href="/"
           onClick={(event) => {
@@ -14,8 +14,8 @@ function Header(props) {
         >
           {props.title}
         </a>
-      </h1>
-      <h1 className="myPage">My Page</h1>
+      </h2>
+      <h2 className="myPage">My Page</h2>
     </header>
   );
 }
@@ -53,7 +53,7 @@ function Nav(props) {
     if (props.selectedTopicId === t.id) {
       if (t.comments.length === 0) {
         let contents = (
-          <h1 key={"noComments"}>
+          <h1 className="noCommentContainer" key={"noComments"}>
             댓글이 없습니다! <br></br> 댓글을 작성해 주세요.
           </h1>
         );
@@ -64,16 +64,17 @@ function Nav(props) {
         console.log("commentNumber", c.commentNumber);
         let contents = (
           <div className="navLists" key={Number(c.commentNumber)}>
-            <div className="navListsImgContainer"></div>
-            <div className="navListsContentContainer">
+            <div className="navListsUserIdContainer">
+              <div className="navListsUserId">{c.userId}</div>
+            </div>
+            <div className="navListsCommentContainer">
               <p
-                className="navListsContentTitle"
+                className="navListsCommentBody"
                 id={c.userId}
                 href={"/read/" + c.userId}
               >
                 {c.body}
               </p>
-              <div className="navListsContentComment"></div>
             </div>
           </div>
         );
@@ -128,13 +129,26 @@ function Comment(props) {
     props.setCommentMode("SHOWCOMMENT");
   };
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input name="userId" type="text" placeholder="Your ID" />
-        <input name="body" type="text" placeholder="댓글을 입력해주세요" />
-        <input type="submit" value="댓글 작성" />
-      </form>
-    </div>
+    <article className="commentArticle">
+      <div className="commentFormContainer">
+        <form className="commentForm" onSubmit={handleSubmit}>
+          <input
+            className="commentFormUserId"
+            name="userId"
+            type="text"
+            placeholder="닉네임"
+          />
+          <textarea
+            className="commentFormBody"
+            name="body"
+            type="text"
+            maxLength="1000"
+            placeholder="댓글을 입력해주세요"
+          />
+          <input className="submitButton" type="submit" value="댓글 작성" />
+        </form>
+      </div>
+    </article>
   );
 }
 
@@ -158,7 +172,7 @@ function Create(props) {
   // console.log(props.nextId);
   return (
     <article className="createArticle">
-      <h1 className="createTitle">Create</h1>
+      <h1 className="createTitle">글 작성하기</h1>
       <div className="createBody">
         <form
           className="createForm"
@@ -175,23 +189,25 @@ function Create(props) {
             className="formUrl"
             type="url"
             name="url"
-            placeholder="Please put your Image Url"
+            placeholder="이미지 URL을 적어주세요"
           ></input>
           <input
             className="formTitle"
             type="text"
             name="title"
-            placeholder="title"
+            placeholder="제목"
           />
 
           <textarea
             className="formBody"
             name="body"
-            placeholder="body"
+            placeholder="내용을 적어주세요"
+            maxLength="1000"
           ></textarea>
 
           <p>
             <input
+              className="contextButtons"
               onClick={(event) => {
                 props.onChangeCommentMode("SHOWCOMMENT");
                 props.setSelectedTopicId(props.nextId);
@@ -212,7 +228,7 @@ function Update(props) {
   const [url, setUrl] = useState(props.url);
   return (
     <article className="updateArticle">
-      <h2 className="updateTitle">Update</h2>
+      <h2 className="updateTitle">글 수정하기</h2>
       <div className="updateBody">
         <form
           className="updateForm"
@@ -245,6 +261,7 @@ function Update(props) {
             }}
           />
           <textarea
+            maxLength="1000"
             className="formBody"
             name="body"
             placeholder="body"
@@ -254,7 +271,11 @@ function Update(props) {
             }}
           ></textarea>
           <p>
-            <input type="submit" value="수정 완료"></input>
+            <input
+              className="contextButtons"
+              type="submit"
+              value="수정 완료"
+            ></input>
           </p>
         </form>
       </div>
@@ -333,6 +354,7 @@ function Board() {
     );
     contextControl = (
       <button
+        className="contextButtons"
         href="/create"
         onClick={(event) => {
           event.preventDefault();
@@ -367,6 +389,7 @@ function Board() {
     contextControl = (
       <>
         <button
+          className="contextButtons"
           href="/comment"
           onClick={(event) => {
             event.preventDefault();
@@ -376,6 +399,7 @@ function Board() {
           댓글 달기
         </button>
         <button
+          className="contextButtons"
           href={"/update" + id}
           onClick={(event) => {
             event.preventDefault();
@@ -385,6 +409,7 @@ function Board() {
           글 수정하기
         </button>
         <input
+          className="contextButtons"
           type="button"
           value="글 삭제하기"
           onClick={() => {
@@ -399,6 +424,7 @@ function Board() {
           }}
         ></input>
         <button
+          className="contextButtons"
           onClick={(event) => {
             event.preventDefault();
             setMode("WELCOME");
@@ -437,6 +463,7 @@ function Board() {
     );
     contextControl = (
       <button
+        className="contextButtons"
         onClick={(event) => {
           event.preventDefault();
           setMode("READ");
@@ -448,12 +475,14 @@ function Board() {
   } else if (mode === "UPDATE") {
     let title,
       body,
-      url = null;
+      url,
+      comment = null;
     for (let i = 0; i < topics.length; i++) {
       if (topics[i].id === id) {
         title = topics[i].title;
         body = topics[i].body;
         url = topics[i].url;
+        comment = topics[i].comments;
       }
     }
     content = (
@@ -461,6 +490,7 @@ function Board() {
         title={title}
         body={body}
         url={url}
+        comment={comment}
         onUpdate={(title, body, url) => {
           const newTopics = [...topics];
           const updatedTopic = {
@@ -468,7 +498,7 @@ function Board() {
             title: title,
             body: body,
             url: url,
-            comments: [],
+            comments: comment,
           };
           for (let i = 0; i < newTopics.length; i++) {
             if (newTopics[i].id === id) {
@@ -483,6 +513,7 @@ function Board() {
     );
     contextControl = (
       <button
+        className="contextButtons"
         onClick={(event) => {
           event.preventDefault();
           setMode("READ");
