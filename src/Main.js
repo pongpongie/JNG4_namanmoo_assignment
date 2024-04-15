@@ -23,7 +23,6 @@ function ContainerLeft() {
 }
 
 function ContainerRight(props) {
-  console.log(props);
   if (props.mode === "LOGIN") {
     return (
       <div className="containerRight">
