@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .container {
   height: 50%;
   width: 60%;
@@ -54,8 +55,87 @@
 
 .changeMode {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   height: 10%;
-  font-size: 12px;
+  font-size: 10px;
+}
+
+.id {
+  font-size: 1.2em;
+}
+
+.password {
+  font-size: 1.2em;
+}
+
+/* Buttons */
+.submitButton {
+  font-size: 1.2em;
+  background: #00ae68;
+  /* display: block; */
+  /* position: relative; */
+  width: 120px;
+  font-weight: 400;
+  text-align: center;
+  line-height: 30px;
+  color: #fff;
+  border-radius: 5px;
+  border-color: white;
+  border-width: 0;
+  transition: all 0.2s;
+}
+
+.submitButton:hover {
+  background: #21825b;
+}
+
+.loginButton {
+  font-size: 1.2em;
+  background: #00ae68;
+  /* display: block; */
+  /* position: relative; */
+  width: 100%;
+  font-weight: 400;
+  text-align: center;
+  line-height: 30px;
+  color: #fff;
+  border-radius: 5px;
+  border-color: white;
+  border-width: 0;
+  transition: all 0.2s;
+}
+
+.signUpButton {
+  font-size: 1.2em;
+  background: #00ae68;
+  /* display: block; */
+  /* position: relative; */
+  width: 40%;
+  font-weight: 400;
+  text-align: center;
+  line-height: 30px;
+  color: #fff;
+  border-radius: 5px;
+  border-color: white;
+  border-width: 0;
+  transition: all 0.2s;
+}
+.signUpButton:hover {
+  background: #21825b;
+}
+.goBackButton {
+  font-size: 1.2em;
+  background: #00ae68;
+  /* display: block; */
+  /* position: relative; */
+  width: 40%;
+  font-weight: 400;
+  text-align: center;
+  line-height: 30px;
+  color: #fff;
+  border-radius: 5px;
+  border-color: white;
+  border-width: 0;
+  transition: all 0.2s;
 }
