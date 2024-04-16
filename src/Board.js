@@ -1,6 +1,6 @@
 import "./Board.css";
+import { fetchPosts, createPost, updatePost, deletePost } from "./api";
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 function Header(props) {
   return (
@@ -62,7 +62,6 @@ function Nav(props) {
       }
       for (let j = 0; j < t.comments.length; j++) {
         let c = t.comments[j];
-        console.log("commentNumber", c.commentNumber);
         let contents = (
           <div className="navLists" key={Number(c.commentNumber)}>
             <div className="navListsUserIdContainer">
@@ -84,16 +83,10 @@ function Nav(props) {
     }
   }
 
-  console.log(commentList);
-
   if (props.mode === "READ") {
     if (props.commentMode === "SHOWCOMMENT") {
       return <div className="navContainer">{commentList}</div>;
     } else if (props.commentMode === "WRITECOMMENT") {
-      console.log(
-        "1111",
-        props.topics[props.selectedTopicId - 1].comments.length
-      );
       return (
         <Comment
           commentNumber={Number(
@@ -120,7 +113,6 @@ function Comment(props) {
   if (props.commentNumber !== 0) {
     commentNumber += 1;
   }
-  console.log("on Comment Props: ", props.commentNumber);
   const handleSubmit = (event) => {
     event.preventDefault();
     const userId = event.target.userId.value;
@@ -170,7 +162,6 @@ function Article(props) {
 }
 
 function Create(props) {
-  // console.log(props.nextId);
   return (
     <article className="createArticle">
       <h1 className="createTitle">글 작성하기</h1>
@@ -183,7 +174,8 @@ function Create(props) {
             const body = event.target.body.value;
             const url = event.target.url.value;
             const comment = [];
-            props.onCreate(title, body, url, comment);
+            const id = null;
+            props.onCreate(id, title, body, url, comment);
           }}
         >
           <input
@@ -210,8 +202,8 @@ function Create(props) {
             <input
               className="contextButtons"
               onClick={(event) => {
-                props.onChangeCommentMode("SHOWCOMMENT");
-                props.setSelectedTopicId(props.nextId);
+                // props.onChangeCommentMode("SHOWCOMMENT");
+                // props.setSelectedTopicId(props.nextId);
               }}
               type="submit"
               value="글 작성하기"
@@ -295,23 +287,57 @@ function Board() {
   let content = null;
   let contextControl = null;
 
-  const fetchPosts = () => {
-    axios
-      .get(
-        "https://dba8817b-bc4c-49ec-90a0-3f60823a1f40.mock.pstmn.io/api/posts/test01"
-      )
-      .then((res) => {
-        console.log(res.data);
-        setTopics(res.data);
+  const handleCreate = (id, title, body, url, comments) => {
+    const newPost = { id: nextId, title, body, url, comments };
+    console.log(newPost);
+    createPost(newPost)
+      .then((post) => {
+        setTopics(topics.concat(post));
+        setMode("READ");
+        setId(nextId);
+        setNextId(nextId + 1);
       })
-      .catch((err) => console.error("Error: ", err));
+      .catch((error) => {
+        // 에러 처리
+      });
+  };
+
+  const handleUpdate = (id, title, body, url) => {
+    updatePost(id, { title, body, url })
+      .then((updatedPost) => {
+        const newTopics = topics.map((topic) =>
+          topic.id === id ? updatedPost : topic
+        );
+        setTopics(newTopics);
+        setMode("READ");
+      })
+      .catch((error) => {
+        // 에러 처리
+      });
+  };
+
+  const handleDelete = (id) => {
+    deletePost(id)
+      .then(() => {
+        const newTopics = topics.filter((topic) => topic.id !== id);
+        setTopics(newTopics);
+        setMode("WELCOME");
+      })
+      .catch((error) => {
+        // 에러 처리
+      });
   };
 
   useEffect(() => {
-    fetchPosts();
+    fetchPosts()
+      .then((data) => {
+        setTopics(data);
+      })
+      .catch((error) => {
+        // 에러 처리
+      });
   }, []);
 
-  console.log("topics", topics);
   const addCommentToTopic = (topicId, newComment) => {
     setTopics((topics) =>
       topics.map((topic) =>
@@ -418,22 +444,7 @@ function Board() {
         selectedTopicId={selectedTopicId}
         commentMode={commentMode}
         onChangeCommentMode={setCommentMode}
-        onChangeMode={setMode}
-        onCreate={(_title, _body, _url) => {
-          const newTopic = {
-            id: nextId,
-            title: _title,
-            body: _body,
-            url: _url,
-            comments: [],
-          };
-          const newTopics = [...topics];
-          newTopics.push(newTopic);
-          setTopics(newTopics);
-          setMode("READ");
-          setId(nextId);
-          setNextId(nextId + 1);
-        }}
+        onCreate={handleCreate}
       ></Create>
     );
     contextControl = (
