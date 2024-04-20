@@ -1,14 +1,8 @@
 import { useState } from "react";
-import "./App.css";
-import Main from "./Main";
-import Board from "./Board";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  useNavigate,
-} from "react-router-dom";
+import "./assets/App.css";
+import Main from "./pages/Main";
+import Board from "./pages/Board";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   const [mode, setMode] = useState("LOGIN");

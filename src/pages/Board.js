@@ -1,5 +1,5 @@
-import "./Board.css";
-import { fetchPosts, createPost, updatePost, deletePost } from "./api";
+import "../assets/Board.css";
+import { fetchPosts, createPost, updatePost, deletePost } from "../lib/api";
 import { useEffect, useState } from "react";
 
 function Header(props) {

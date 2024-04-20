@@ -1,4 +1,4 @@
-import "./Main.css";
+import "../assets/Main.css";
 // import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
