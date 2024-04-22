@@ -1,5 +1,4 @@
 import "../assets/Main.css";
-// import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Container(props) {
