@@ -1,4 +1,10 @@
-export default function Create(props) {
+import { useContext } from "react";
+import { PostContext } from "../context/Contexts";
+import { useNavigate } from "react-router-dom";
+
+export default function Create() {
+  const navigate = useNavigate();
+  const { nextId, handleCreate } = useContext(PostContext);
   return (
     <article className="createArticle">
       <h1 className="createTitle">글 작성하기</h1>
@@ -11,8 +17,8 @@ export default function Create(props) {
             const body = event.target.body.value;
             const url = event.target.url.value;
             const comment = [];
-            const id = null;
-            props.onCreate(id, title, body, url, comment);
+            handleCreate(nextId, title, body, url, comment);
+            navigate("/board/welcome");
           }}
         >
           <input

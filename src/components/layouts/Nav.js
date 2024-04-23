@@ -1,64 +1,66 @@
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { BoardInfoContext } from "../../context/Contexts";
 import Comment from "../../features/Comment";
 
 export default function Nav(props) {
+  const { topics } = useContext(BoardInfoContext);
   const lis = [];
   const commentList = [];
-  for (let i = 0; i < props.topics.length; i++) {
-    let t = props.topics[i];
+  const navigate = useNavigate();
+
+  for (let i = 0; i < topics.length; i++) {
+    let t = topics[i];
     lis.push(
       <div className="navLists" key={t.id}>
         <div className="navListsImgContainer">
           <img className="navListsImg" src={t.url} alt="mock"></img>
         </div>
         <div className="navListsContentContainer">
-          <a
+          <div
             className="navListsContentTitle"
             id={t.id}
-            href={"/read/" + t.id}
             onClick={(event) => {
               event.preventDefault();
-              props.onChangeMode(Number(event.target.id));
-              props.onChangeCommentMode("SHOWCOMMENT");
-              props.setSelectedTopicId(t.id);
+              navigate("read/" + t.id);
             }}
           >
             {t.title}
-          </a>
+          </div>
           <div className="navListsContentComment">
             댓글 수 : {t.comments.length}
           </div>
         </div>
       </div>
     );
-    if (props.selectedTopicId === t.id) {
-      if (t.comments.length === 0) {
-        let contents = (
-          <h1 className="noCommentContainer" key={"noComments"}>
-            댓글이 없습니다! <br></br> 댓글을 작성해 주세요.
-          </h1>
-        );
-        commentList.push(contents);
-      }
-      for (let j = 0; j < t.comments.length; j++) {
-        let c = t.comments[j];
-        let contents = (
-          <div className="navLists" key={Number(c.commentNumber)}>
-            <div className="navListsUserIdContainer">
-              <div className="navListsUserId">{c.userId}</div>
-            </div>
-            <div className="navListsCommentContainer">
-              <p
-                className="navListsCommentBody"
-                id={c.userId}
-                href={"/read/" + c.userId}
-              >
-                {c.body}
-              </p>
-            </div>
+    if (t.comments.length === 0) {
+      let contents = (
+        <h1 className="noCommentContainer" key={"noComments"}>
+          댓글이 없습니다! <br></br> 댓글을 작성해 주세요.
+        </h1>
+      );
+      commentList.push(contents);
+    }
+    for (let j = 0; j < t.comments.length; j++) {
+      let c = t.comments[j];
+      let contents = (
+        <div className="navLists" key={Number(c.commentNumber)}>
+          <div className="navListsUserIdContainer">
+            <div className="navListsUserId">{c.userId}</div>
           </div>
-        );
-        commentList.push(contents);
-      }
+          <div className="navListsCommentContainer">
+            <p
+              className="navListsCommentBody"
+              id={c.userId}
+              href={"/read/" + c.userId}
+            >
+              {c.body}
+            </p>
+          </div>
+        </div>
+      );
+      commentList.push(contents);
     }
   }
 

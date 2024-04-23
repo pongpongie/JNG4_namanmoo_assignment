@@ -3,16 +3,22 @@ import Article from "../components/Article";
 import Update from "../features/Update";
 import Header from "../components/layouts/Header";
 import Create from "../features/Create";
+import Welcome from "./WelcomePage";
+import Read from "./ReadPage";
 import Nav from "../components/layouts/Nav";
-import { fetchPosts, createPost, updatePost, deletePost } from "../lib/api";
-import { useEffect, useState } from "react";
+import CreateButton from "../components/CreateButton";
+import ContextButtons from "../components/ContextButtons";
+
+import { PostContext, BoardInfoContext } from "../context/Contexts";
+import { useLocation, useParams } from "react-router-dom";
+import { fetchPosts, createPost, deletePost } from "../lib/api";
+import { useEffect, useState, useContext } from "react";
 
 function Board() {
-  const [selectedTopicId, setSelectedTopicId] = useState(null);
   const [mode, setMode] = useState("WELCOME");
   const [commentMode, setCommentMode] = useState("NOCOMMENT");
   const [id, setId] = useState(null);
-  const [nextId, setNextId] = useState(5);
+  const [nextId, setNextId] = useState();
   const [topics, setTopics] = useState([]);
 
   let content = null;
@@ -20,7 +26,6 @@ function Board() {
 
   const handleCreate = (id, title, body, url, comments) => {
     const newPost = { id: nextId, title, body, url, comments };
-    console.log(newPost);
     createPost(newPost)
       .then((post) => {
         setTopics(topics.concat(post));
@@ -28,19 +33,20 @@ function Board() {
         setId(nextId);
         setNextId(nextId + 1);
       })
-      .catch((error) => {
-        // 에러 처리
-      });
+      .catch((error) => {});
+  };
+
+  const handleDelete = (id) => {
+    deletePost(id);
   };
 
   useEffect(() => {
     fetchPosts()
       .then((data) => {
+        setNextId(data[data.length - 1].id + 1);
         setTopics(data);
       })
-      .catch((error) => {
-        // 에러 처리
-      });
+      .catch((error) => {});
   }, []);
 
   const addCommentToTopic = (topicId, newComment) => {
@@ -52,116 +58,8 @@ function Board() {
       )
     );
   };
-  if (mode === "WELCOME") {
-    content = (
-      <h1>
-        Welcome to the Jungle <br></br> this is Jungle Board
-      </h1>
-    );
-    contextControl = (
-      <button
-        className="contextButtons"
-        href="/create"
-        onClick={(event) => {
-          event.preventDefault();
-          setMode("CREATE");
-        }}
-      >
-        글 작성하기
-      </button>
-    );
-  } else if (mode === "READ") {
-    let title,
-      body,
-      url,
-      comments = null;
-    for (let i = 0; i < topics.length; i++) {
-      if (topics[i].id === id) {
-        title = topics[i].title;
-        body = topics[i].body;
-        url = topics[i].url;
-        comments = topics[i].comments;
-      }
-    }
-    content = (
-      <Article
-        comments={comments}
-        url={url}
-        title={title}
-        body={body}
-      ></Article>
-    );
 
-    contextControl = (
-      <>
-        <button
-          className="contextButtons"
-          href="/comment"
-          onClick={(event) => {
-            event.preventDefault();
-            setCommentMode("WRITECOMMENT");
-          }}
-        >
-          댓글 달기
-        </button>
-        <button
-          className="contextButtons"
-          href={"/update" + id}
-          onClick={(event) => {
-            event.preventDefault();
-            setMode("UPDATE");
-          }}
-        >
-          글 수정하기
-        </button>
-        <input
-          className="contextButtons"
-          type="button"
-          value="글 삭제하기"
-          onClick={() => {
-            const newTopics = [];
-            for (let i = 0; i < topics.length; i++) {
-              if (topics[i].id !== id) {
-                newTopics.push(topics[i]);
-              }
-            }
-            setTopics(newTopics);
-            setMode("WELCOME");
-          }}
-        ></input>
-        <button
-          className="contextButtons"
-          onClick={(event) => {
-            event.preventDefault();
-            setMode("WELCOME");
-            setCommentMode("NOCOMMENT");
-          }}
-        >
-          뒤로 가기
-        </button>
-      </>
-    );
-  } else if (mode === "CREATE") {
-    content = (
-      <Create
-        nextId={nextId}
-        commentMode={commentMode}
-        onChangeCommentMode={setCommentMode}
-        onCreate={handleCreate}
-      ></Create>
-    );
-    contextControl = (
-      <button
-        className="contextButtons"
-        onClick={(event) => {
-          event.preventDefault();
-          setMode("READ");
-        }}
-      >
-        뒤로 가기
-      </button>
-    );
-  } else if (mode === "UPDATE") {
+  if (mode === "UPDATE") {
     let title,
       body,
       url,
@@ -198,44 +96,71 @@ function Board() {
           setTopics(newTopics);
           setMode("READ");
         }}
-      ></Update>
+      />
     );
     contextControl = (
-      <button
-        className="contextButtons"
-        onClick={(event) => {
-          event.preventDefault();
-          setMode("READ");
-        }}
-      >
-        뒤로 가기
-      </button>
+      <ContextButtons
+        mode={mode}
+        onChangeMode={setMode}
+        onChangeCommentMode={setCommentMode}
+      />
     );
   }
-
   return (
     <div className="board">
-      <Header title="JUNGLE BOARD" onChangeMode={setMode}></Header>
+      <Header title="JUNGLE BOARD" onChangeMode={setMode} />
       <div className="boardContainer">
-        <div className="boardContent">{content}</div>
-        <div className="boardInfo">
-          <Nav
-            topics={topics}
-            mode={mode}
-            setMode={setMode}
-            commentMode={commentMode}
-            selectedTopicId={selectedTopicId}
-            setSelectedTopicId={setSelectedTopicId}
-            onChangeCommentMode={setCommentMode}
-            addComment={addCommentToTopic}
-            onChangeMode={(_id) => {
-              setMode("READ");
-              setId(_id);
-            }}
-          ></Nav>
-          <div className="contextContainer">{contextControl}</div>
-        </div>
+        <PostContext.Provider value={{ topics, nextId, handleCreate }}>
+          <BoardContent />
+        </PostContext.Provider>
+        <BoardInfoContext.Provider
+          value={{ topics, setTopics, contextControl, handleDelete }}
+        >
+          <BoardInfo />
+        </BoardInfoContext.Provider>
       </div>
+    </div>
+  );
+}
+
+function BoardContent() {
+  const location = useLocation();
+  const params = useParams();
+  let contents = null;
+
+  if (
+    location.pathname === "/board/welcome" ||
+    location.pathname === "/board"
+  ) {
+    contents = <Welcome />;
+  } else if (location.pathname === "/board/create") {
+    contents = <Create />;
+  } else if (location.pathname.startsWith("/board/read/")) {
+    contents = <Read id={params.id} />;
+  }
+  return <div className="boardContent">{contents}</div>;
+}
+
+function BoardInfo() {
+  let { topics, contextControl } = useContext(BoardInfoContext);
+  const location = useLocation();
+  const params = useParams();
+
+  if (
+    location.pathname === "/board/welcome" ||
+    location.pathname === "/board"
+  ) {
+    contextControl = <CreateButton />;
+  } else if (
+    location.pathname.startsWith("/board/read/") ||
+    location.pathname.startsWith("/board/create")
+  ) {
+    contextControl = <ContextButtons id={params.id} />;
+  }
+  return (
+    <div className="boardInfo">
+      <Nav />
+      <div className="contextContainer">{contextControl}</div>
     </div>
   );
 }
