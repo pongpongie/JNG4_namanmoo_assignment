@@ -13,6 +13,16 @@ export const fetchPosts = async () => {
   }
 };
 
+export const fetchPostById = async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/posts/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch post:", error);
+    throw error;
+  }
+};
+
 export const createPost = async (post) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/posts`, post);

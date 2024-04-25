@@ -1,6 +1,4 @@
 import "../assets/Board.css";
-import Article from "../components/Article";
-import Update from "../features/Update";
 import Header from "../components/layouts/Header";
 import Create from "../features/Create";
 import Welcome from "./WelcomePage";
@@ -21,7 +19,7 @@ function Board() {
   const [nextId, setNextId] = useState();
   const [topics, setTopics] = useState([]);
 
-  let content = null;
+  // let content = null;
   let contextControl = null;
 
   const handleCreate = (id, title, body, url, comments) => {
@@ -48,73 +46,23 @@ function Board() {
       })
       .catch((error) => {});
   }, []);
-
-  const addCommentToTopic = (topicId, newComment) => {
-    setTopics((topics) =>
-      topics.map((topic) =>
-        topic.id === topicId
-          ? { ...topic, comments: [...topic.comments, newComment] }
-          : topic
-      )
-    );
-  };
-
-  if (mode === "UPDATE") {
-    let title,
-      body,
-      url,
-      comment = null;
-    for (let i = 0; i < topics.length; i++) {
-      if (topics[i].id === id) {
-        title = topics[i].title;
-        body = topics[i].body;
-        url = topics[i].url;
-        comment = topics[i].comments;
-      }
-    }
-    content = (
-      <Update
-        title={title}
-        body={body}
-        url={url}
-        comment={comment}
-        onUpdate={(title, body, url) => {
-          const newTopics = [...topics];
-          const updatedTopic = {
-            id: id,
-            title: title,
-            body: body,
-            url: url,
-            comments: comment,
-          };
-          for (let i = 0; i < newTopics.length; i++) {
-            if (newTopics[i].id === id) {
-              newTopics[i] = updatedTopic;
-              break;
-            }
-          }
-          setTopics(newTopics);
-          setMode("READ");
-        }}
-      />
-    );
-    contextControl = (
-      <ContextButtons
-        mode={mode}
-        onChangeMode={setMode}
-        onChangeCommentMode={setCommentMode}
-      />
-    );
-  }
   return (
     <div className="board">
       <Header title="JUNGLE BOARD" onChangeMode={setMode} />
       <div className="boardContainer">
-        <PostContext.Provider value={{ topics, nextId, handleCreate }}>
+        <PostContext.Provider
+          value={{ fetchPosts, topics, nextId, handleCreate }}
+        >
           <BoardContent />
         </PostContext.Provider>
         <BoardInfoContext.Provider
-          value={{ topics, setTopics, contextControl, handleDelete }}
+          value={{
+            fetchPosts,
+            topics,
+            setTopics,
+            contextControl,
+            handleDelete,
+          }}
         >
           <BoardInfo />
         </BoardInfoContext.Provider>
@@ -142,7 +90,7 @@ function BoardContent() {
 }
 
 function BoardInfo() {
-  let { topics, contextControl } = useContext(BoardInfoContext);
+  let { contextControl } = useContext(BoardInfoContext);
   const location = useLocation();
   const params = useParams();
 
